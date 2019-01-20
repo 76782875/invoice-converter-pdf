@@ -25,8 +25,8 @@ public class StatementMaker {
 
     public void createStatement(List<Invoice> invoices) {
         LocalDate.now().minusMonths(1);
-        LocalDate firstInMonth = LocalDate.now().minusMonths(1).with(java.time.temporal.TemporalAdjusters.firstDayOfMonth());
-        LocalDate lastInMonth = firstInMonth.with(java.time.temporal.TemporalAdjusters.lastDayOfMonth());
+        LocalDate firstInMonth = getPeriodBegin(invoices);
+        LocalDate lastInMonth = getPeriodEnd(invoices);
         ByteArrayOutputStream bos = createPDF(firstInMonth, lastInMonth, invoices);
         try(OutputStream outputStream = new FileOutputStream(String.valueOf(Paths.get(workingDir).resolve(generateOutputFilePath(firstInMonth.getYear(), firstInMonth.getMonthValue()))))) {
             bos.writeTo(outputStream);
@@ -35,6 +35,17 @@ public class StatementMaker {
         }
 
     }
+
+    private LocalDate getPeriodBegin(List<Invoice> invoices) {
+        Invoice firstInvoice = invoices.get(0);
+        return firstInvoice.getIssuingDate().with(java.time.temporal.TemporalAdjusters.firstDayOfMonth());
+    }
+
+    private LocalDate getPeriodEnd(List<Invoice> invoices) {
+        Invoice lastInvoice = invoices.get(invoices.size()-1);
+        return lastInvoice.getIssuingDate().with(java.time.temporal.TemporalAdjusters.lastDayOfMonth());
+    }
+
     public String generateOutputFilePath(int year, int month) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM");
         String monthName = LocalDate.of(year, month, 1).format(formatter);
