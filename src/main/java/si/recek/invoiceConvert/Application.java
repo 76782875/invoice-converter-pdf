@@ -22,7 +22,6 @@ import si.recek.invoiceConverter.synchronization.InvoiceSynchronizer;
 
 
 public class Application {
-    public static final String inputZip = Paths.get(System.getProperty("user.dir")).resolve("Vhod").resolve("RAČUNI.zip").toString();
     public static final String workingDir = Paths.get(System.getProperty("user.dir")).resolve("Izhod").toString();
 
     public static void main(String[] args) {
@@ -62,12 +61,22 @@ public class Application {
         Path destinationFolder = Paths.get(workingDir);
 
         try {
-            ZipFile zipFile = new ZipFile(new File(inputZip));
+            ZipFile zipFile = new ZipFile(new File(getInputZipPath()));
             zipFile.extractAll(destinationFolder.toString());
         } catch (ZipException e) {
             e.printStackTrace();
         }
         return destinationFolder;
+    }
+
+    private String getInputZipPath() {
+        String zipPath = null;
+        for(File f : Paths.get(System.getProperty("user.dir")).resolve("Vhod").toFile().listFiles()){
+            if(f.getName().toLowerCase().contains("zip".toLowerCase())){
+                zipPath = f.getAbsolutePath();
+            }
+        }
+        return zipPath;
     }
 
     private void readEntryFileAndUpdateDB(File entryFile) {
