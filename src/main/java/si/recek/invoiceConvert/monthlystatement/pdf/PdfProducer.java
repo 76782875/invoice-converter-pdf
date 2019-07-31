@@ -5,6 +5,7 @@ import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import si.recek.invoiceConvert.Application;
 import si.recek.invoiceConvert.model.Invoice;
 import si.recek.invoiceConvert.model.InvoiceEntry;
 
@@ -140,8 +141,8 @@ public class PdfProducer {
     }
 
     private void printCompanyTitle() throws DocumentException {
-        document.add(new Paragraph("Frizerski salon Ur≈°ka"));
-        document.add(new Paragraph("Ur≈°ka Recek s.p"));
+        document.add(new Paragraph("Frizerski salon Uröka"));
+        document.add(new Paragraph("Uröka Recek s.p"));
         document.add(new Paragraph("Na terasi 7a"));
         document.add(new Paragraph("2000, Maribor"));
     }
@@ -208,7 +209,7 @@ public class PdfProducer {
 
         PdfPTable table = new PdfPTable(5);
         table.setWidthPercentage(100);
-        String [] headerValues = {"≈†ifra", "Artikel", "Osnova", "DDV", "Vrednost"};
+        String [] headerValues = {"äifra", "Artikel", "Osnova", "DDV", "Vrednost"};
         printBoldTableRow(table, headerValues);
         ArrayList<String[]> rows = new ArrayList<>();
         String [] cells = {"S", "Storitev", getDocumentsTotal(), "0,00", getDocumentsTotal()};
@@ -248,7 +249,7 @@ public class PdfProducer {
 
         PdfPTable table = new PdfPTable(3);
         table.setWidthPercentage(100);
-        String [] headerValues = {"≈†ifra", "Nacin placila", "Vrednost"};
+        String [] headerValues = {"äifra", "Nacin placila", "Vrednost"};
         printBoldTableRow(table, headerValues);
         ArrayList<String[]> rows = new ArrayList<>();
         String [] cells = {"G", "Gotovina", getDocumentsTotal()};

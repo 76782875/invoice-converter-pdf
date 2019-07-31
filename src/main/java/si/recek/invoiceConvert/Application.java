@@ -10,8 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -26,6 +26,8 @@ public class Application {
 
     public static void main(String[] args) {
         Application app = new Application();
+        System.out.println("to je š , to je è. in to je ž");
+        System.out.println("File encoding is " + System.getProperty("file.encoding") + " and should be windows-1250");
         app.convert();
     }
 
