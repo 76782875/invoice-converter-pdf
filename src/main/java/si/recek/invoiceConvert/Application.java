@@ -8,13 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
 import si.recek.invoiceConvert.monthlystatement.StatementMaker;
 import si.recek.invoiceConverter.synchronization.InputEntry;
 import si.recek.invoiceConverter.synchronization.InvoiceRepository;
@@ -26,8 +21,7 @@ public class Application {
 
     public static void main(String[] args) {
         Application app = new Application();
-        System.out.println("to je ö , to je Ë. in to je û");
-        System.out.println("File encoding is " + System.getProperty("file.encoding") + " and should be windows-1250");
+        System.out.println("to je ≈° , to je ƒç. in to je ≈æ");
         app.convert();
     }
 
@@ -41,9 +35,8 @@ public class Application {
 
 
     private void getInvoiceStructure() {
-        Path destinationFolder = unzip();
         File entryFile = null;
-
+        Path destinationFolder = Paths.get(System.getProperty("user.dir")).resolve("Vhod");
         for(File f : destinationFolder.toFile().listFiles()){
             if(f.getName().toLowerCase().contains("POSTAVKE".toLowerCase())){
                 entryFile = f;
@@ -53,37 +46,12 @@ public class Application {
             readEntryFileAndUpdateDB(entryFile);
         }
 
-
-        for(File f : destinationFolder.toFile().listFiles()){
-            f.delete();
-        }
     }
 
-    public Path unzip() {
-        Path destinationFolder = Paths.get(workingDir);
-
-        try {
-            ZipFile zipFile = new ZipFile(new File(getInputZipPath()));
-            zipFile.extractAll(destinationFolder.toString());
-        } catch (ZipException e) {
-            e.printStackTrace();
-        }
-        return destinationFolder;
-    }
-
-    private String getInputZipPath() {
-        String zipPath = null;
-        for(File f : Paths.get(System.getProperty("user.dir")).resolve("Vhod").toFile().listFiles()){
-            if(f.getName().toLowerCase().contains("zip".toLowerCase())){
-                zipPath = f.getAbsolutePath();
-            }
-        }
-        return zipPath;
-    }
 
     private void readEntryFileAndUpdateDB(File entryFile) {
         String cvsSplitBy = ";";
-        convertToUTF(entryFile);
+        //convertToUTF(entryFile);
         List<String> lines = new ArrayList<>();
         List<InputEntry> entries = new ArrayList<InputEntry>();
         try {
@@ -97,6 +65,8 @@ public class Application {
             String[] entryFromFile = line.split(cvsSplitBy);
             InputEntry row = new InputEntry();
             row.setInvoiceID(entryFromFile[5]);
+            row.setPlaceID(entryFromFile[4]);
+            row.setDeviceID(entryFromFile[3]);
             row.setDateFromString(entryFromFile[1]);
             row.setTimeFromString(entryFromFile[2]);
             row.setProductNotation(entryFromFile[8]);

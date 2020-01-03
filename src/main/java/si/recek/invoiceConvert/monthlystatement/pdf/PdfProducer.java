@@ -14,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -57,17 +58,16 @@ public class PdfProducer {
 
     private ArrayList<String[]> formatDocumentsContent() {
         ArrayList<String []> rows = new ArrayList<>();
-        //listDevs.sort((Developer o1, Developer o2)->o1.getAge()-o2.getAge());
-        invoicesInMonth.sort((o1, o2) -> Integer.valueOf(o1.getIdentifier()) - Integer.valueOf(o2.getIdentifier()));
-        ;
+        invoicesInMonth.sort(Comparator.comparing(Invoice::getIssuingDateTime));
         for(Invoice invoice : invoicesInMonth) {
             String [] values = new String[3];
             values[0] = invoice.getIssuingDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-            if(invoice.getIdentifier().contains("P1-B1")){
-                values[1] = String.format("Racun %s",invoice.getIdentifier());
-            }else{
-                values[1] = String.format("Racun %s/P1/1",invoice.getIdentifier());
-            }
+//            if(invoice.getIdentifier().contains("P1-B1")){
+//                values[1] = String.format("Racun %s",invoice.getIdentifier());
+//            }else{
+//                values[1] = String.format("Racun %s/P1/1",invoice.getIdentifier());
+//            }
+            values[1] = invoice.getDeviceID() + "-" + invoice.getPlaceID() + "-" +invoice.getIdentifier();
             values[2] = String.format("%.2f", invoice.getValue());
             rows.add(values);
         }
@@ -141,8 +141,8 @@ public class PdfProducer {
     }
 
     private void printCompanyTitle() throws DocumentException {
-        document.add(new Paragraph("Frizerski salon Uröka"));
-        document.add(new Paragraph("Uröka Recek s.p"));
+        document.add(new Paragraph("Frizerski salon Ur≈°ka"));
+        document.add(new Paragraph("Ur≈°ka Recek s.p"));
         document.add(new Paragraph("Na terasi 7a"));
         document.add(new Paragraph("2000, Maribor"));
     }
@@ -209,7 +209,7 @@ public class PdfProducer {
 
         PdfPTable table = new PdfPTable(5);
         table.setWidthPercentage(100);
-        String [] headerValues = {"äifra", "Artikel", "Osnova", "DDV", "Vrednost"};
+        String [] headerValues = {"≈†ifra", "Artikel", "Osnova", "DDV", "Vrednost"};
         printBoldTableRow(table, headerValues);
         ArrayList<String[]> rows = new ArrayList<>();
         String [] cells = {"S", "Storitev", getDocumentsTotal(), "0,00", getDocumentsTotal()};
@@ -249,7 +249,7 @@ public class PdfProducer {
 
         PdfPTable table = new PdfPTable(3);
         table.setWidthPercentage(100);
-        String [] headerValues = {"äifra", "Nacin placila", "Vrednost"};
+        String [] headerValues = {"≈†ifra", "Nacin placila", "Vrednost"};
         printBoldTableRow(table, headerValues);
         ArrayList<String[]> rows = new ArrayList<>();
         String [] cells = {"G", "Gotovina", getDocumentsTotal()};

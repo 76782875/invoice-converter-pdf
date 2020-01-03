@@ -53,7 +53,7 @@ public class StatementMaker {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM");
         String monthName = LocalDate.of(year, month, 1).format(formatter);
         monthName = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
-        return String.format("POS_Izpis_Salon_Uröka_%s_%d.pdf", monthName, year);
+        return String.format("POS_Izpis_Salon_Ur≈°ka_%s_%d.pdf", monthName, year);
 
     }
 

@@ -11,6 +11,8 @@ public class InputEntry {
 
     LocalDate date;
     String invoiceID;
+    String placeID;
+    String deviceID;
     LocalTime time;
     String productNotation;
     int amount;
@@ -62,6 +64,22 @@ public class InputEntry {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public String getPlaceID() {
+        return placeID;
+    }
+
+    public void setPlaceID(String placeID) {
+        this.placeID = placeID;
+    }
+
+    public String getDeviceID() {
+        return deviceID;
+    }
+
+    public void setDeviceID(String deviceID) {
+        this.deviceID = deviceID;
     }
 
     public void setDateFromString(String s) {

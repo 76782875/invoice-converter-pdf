@@ -35,6 +35,8 @@ public class InvoiceSynchronizer {
         if (invoice == null) {
             invoice = new Invoice();
             invoice.setIdentifier(invoiceIdentifier);
+            invoice.setPlaceID(entry.getPlaceID());
+            invoice.setDeviceID(entry.getDeviceID());
             invoice.setIssuingDate(entry.getDate());
             invoice.setIssuingTime(entry.getTime());
         }

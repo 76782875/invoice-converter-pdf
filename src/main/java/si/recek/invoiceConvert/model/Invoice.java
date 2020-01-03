@@ -3,6 +3,7 @@ package si.recek.invoiceConvert.model;
 import si.recek.invoiceConvert.model.InvoiceEntry;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ public class Invoice {
     Long id;
     int invoiceNumber;
     String identifier;
+    String placeID;
+    String deviceID;
     LocalDate issuingDate;
     LocalTime issuingTime;
     double value;
@@ -89,6 +92,22 @@ public class Invoice {
         this.discount = discount;
     }
 
+    public String getPlaceID() {
+        return placeID;
+    }
+
+    public void setPlaceID(String placeID) {
+        this.placeID = placeID;
+    }
+
+    public String getDeviceID() {
+        return deviceID;
+    }
+
+    public void setDeviceID(String deviceID) {
+        this.deviceID = deviceID;
+    }
+
     public void addInvoiceEntry(InvoiceEntry e) {
         entries.add(e);
         e.setInvoice(this);
@@ -109,5 +128,9 @@ public class Invoice {
             balance += e.getValue();
         }
         setValue(balance);
+    }
+
+    public LocalDateTime getIssuingDateTime() {
+        return getIssuingDate().atTime(getIssuingTime());
     }
 }
