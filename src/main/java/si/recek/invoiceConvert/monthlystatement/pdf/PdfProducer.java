@@ -5,7 +5,6 @@ import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import si.recek.invoiceConvert.Application;
 import si.recek.invoiceConvert.model.Invoice;
 import si.recek.invoiceConvert.model.InvoiceEntry;
 
@@ -62,16 +61,15 @@ public class PdfProducer {
         for(Invoice invoice : invoicesInMonth) {
             String [] values = new String[3];
             values[0] = invoice.getIssuingDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-//            if(invoice.getIdentifier().contains("P1-B1")){
-//                values[1] = String.format("Racun %s",invoice.getIdentifier());
-//            }else{
-//                values[1] = String.format("Racun %s/P1/1",invoice.getIdentifier());
-//            }
-            values[1] = invoice.getDeviceID() + "-" + invoice.getPlaceID() + "-" +invoice.getIdentifier();
+            values[1] = invoiceIDFormatted(invoice);
             values[2] = String.format("%.2f", invoice.getValue());
             rows.add(values);
         }
         return rows;
+    }
+
+    private String invoiceIDFormatted(Invoice invoice) {
+        return invoice.getDeviceID() + "-" + invoice.getPlaceID() + "-" + invoice.getIssuingDate().getYear() + "-" +invoice.getIdentifier();
     }
 
     private ArrayList<String[]> formatArticlesContent() {
